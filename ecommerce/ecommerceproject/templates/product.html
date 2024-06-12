@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block metadescription %}
+    {{ product.description|truncatewords:155 }}
+    Welcome to our Daily Essential Store, where quality meets convenience
+{% endblock %}
+
+{% block title %}
+    {% if category %}
+        {{ product.name }} - Daily Essential Store
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="breadcrumb-container py-3">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'shop:allProdCat' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{{ product.category.get_url }}">{{ product.category }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="container product-container my-5">
+    <div class="row">
+        <div class="col-12 col-lg-6 text-center">
+            <div class="product-image-wrapper mb-4">
+                <img class="img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
+            </div>
+        </div>
+        <div class="col-12 col-lg-6">
+            <div class="product-details">
+                <h1 class="product-title">{{ product.name }}</h1>
+                <p class="product-price display-4">${{ product.price }}</p>
+                <hr>
+                <h5 class="product-description-title">Product Description</h5>
+                <p class="product-description text-justify">{{ product.description }}</p>
+                {% if product.stock <= 0 %}
+                    <p class="out-of-stock text-danger"><strong>Out of stock</strong></p>
+                {% else %}
+                    <a class="btn btn-secondary btn-lg" href="{% url 'cart:add_cart' product.id %}">Add to cart</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
